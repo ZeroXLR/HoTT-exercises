@@ -1,0 +1,140 @@
+\BF{Exercise 1.1.} Given functions $f : \cl{A} \to \cl{B}$ and $g : \cl{B} \to \cl{C}$, define their \BF{composite} $g \circ f : \cl{A} \to \cl{C}$. Show that we have $h \circ (g \circ f) \equiv (h \circ g) \circ f$. \\
+
+
+\textit{Proof:} For $\cl{A},\cl{B},\cl{C} : \cl{U}$, define $\circ : (\cl{B} \to \cl{C}) \to (\cl{A} \to \cl{B}) \to \cl{A} \to \cl{C}$ as $\lambda g . \lambda f . \lambda x . g(f(x))$. Now, for each $x : \cl{A}$, one has $(h \circ (g \circ f))(x) \equiv h((g \circ f)(x)) \equiv h(g(f(x))) \equiv (h \circ g)(f(x)) \equiv ((h \circ g) \circ f)(x)$. \\
+
+
+
+\BF{Exercise 1.2.} Derive the recursion principle for products $\text{rec}_{(\cl{A} \times \cl{B})}$ using only the projections, and verify that the definitional equalities are valid. Do the same for $\Sigma$-types. \\
+
+
+\textit{Proof:} It suffices to show this for $\Sigma$-types as they generalize product types: define $\text{rec}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,p) :\equiv g(\text{pr}_1\,p)(\text{pr}_2\,p)$ where $\cl{C} : \cl{U}$, $g : \Pi_{(x : \cl{A})}\cl{B}(x) \to \cl{C}$ and $p : \Sigma_{(x : \cl{A})}\cl{B}(x)$. Then, $\text{rec}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) :\equiv g(\text{pr}_1\,(a,b))(\text{pr}_2\,(a,b)) \equiv g(a)(b)$. \\
+
+
+    
+\BF{Exercise 1.3.} Derive the induction principle for products $\text{ind}_{\cl{A} \times \cl{B}}$, using only the projections and the propositional uniqueness principle $\text{uniq}_{\cl{A} \times \cl{B}}$. Verify that the definitional equalities are valid. Generalize $\text{uniq}_{\cl{A} \times \cl{B}}$ to $\Sigma$-types, and do the same for $\Sigma$-types. \\
+
+
+\textit{Proof:} Note that in the previous exercise, the uniqueness principle was not necessary because the type $\cl{C} : \cl{U}$ was not a function. Now, however, $\cl{C}$ must take inputs both of the form $(a,b) : \Sigma_{(x : \cl{A})}\cl{B}(x)$ \textit{and} $x : \Sigma_{(x : \cl{A})}\cl{B}(x)$. One needs the uniqueness principle to associate one form to the other.
+
+To reiterate, one needs to derive
+\[
+	\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)} : \prod_{\cl{C} : (\Sigma_{(x : \cl{A})}\cl{B}(x)) \to \cl{U}}(\prod_{a : \cl{A}}\prod_{b : \cl{B}(a)}\cl{C}((a,b))) \to \prod_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\cl{C}(x)
+\]
+This is \textit{not} as simple as defining $\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,x) :\equiv g(\text{pr}_1\,x)(\text{pr}_2\,x)$. The problem is this: for arbitrary $x : \Sigma_{(x : \cl{A})}\cl{B}(x)$, one does not immediately know whether $g(\text{pr}_1\,x)(\text{pr}_2\,x) : \cl{C}(x)$. The only guarantee one has is that $g(\text{pr}_1\,x)(\text{pr}_2\,x) : \cl{C}((\text{pr}_1\,x,\text{pr}_2\,x))$. Now, by the uniqueness principle of product types, one has
+\[
+	\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x : (\text{pr}_1\,x,\text{pr}_2\,x) =_{\Sigma_{(x : \cl{A})}\cl{B}(x)} x
+\]
+where $\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,(a,b) :\equiv \text{refl}_{(a,b)}$. Also, by the recursion principle of identity types (i.e. the indiscernability of identicals),
+\[
+	\text{rec}_{=_{\Sigma_{(x : \cl{A})}\cl{B}(x)}}(\cl{C}, (\text{pr}_1\,x,\text{pr}_2\,x), x, \text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x) : \cl{C}((\text{pr}_1\,x,\text{pr}_2\,x)) \to \cl{C}(x)
+\]
+where $\text{rec}_{=_{\Sigma_{(x : \cl{A})}\cl{B}(x)}}(\cl{C},x,x,\text{refl}_x) :\equiv \text{id}_{\cl{C}(x)}$. Only now can one finally use this to get $\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}$; for convenience, denote the previous function as $(\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x)_*$:
+\[
+\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,x) :\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x)_*(g(\text{pr}_1\,x)(\text{pr}_2\,x))) : \cl{C}(x)
+\]
+In the case where $x \equiv (a,b)$, one can verify the correctness of this definition:
+\begin{align*}
+	\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) &\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,(a,b))_*(g(\text{pr}_1\,(a,b))(\text{pr}_2\,(a,b)))\\
+	&\equiv  (\text{refl}_{(a,b)})_*(g(a)(b)) \equiv  \text{id}_{\cl{C}((a,b))}(g(a)(b)) \equiv  g(a)(b)
+\end{align*}
+
+
+
+\BF{Exercise 1.4.} Assuming as given only the \textit{iterator} for natural numbers
+\[
+	\text{iter} : \prod_{\cl{C}:\cl{U}} \cl{C} \to (\cl{C} \to \cl{C}) \to \mathbb{N} \to \cl{C}
+\]
+with the defining equations
+\begin{align*}
+	\text{iter}(\cl{C}, c_{0}, c_{s}, 0) &:\equiv c_{0} \\
+	\text{iter}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) &:\equiv c_{s}(\text{iter}(\cl{C}, c_{0}, c_{s}, n)),
+\end{align*}
+derive a function having the type of the recursor $\text{rec}_{\mathbb{N}}$. Show that the defining equations of the recursor hold propositionally for this function, using the induction principle for $\mathbb{N}$. \\
+
+
+\textit{Proof:} The difference between \text{iter} and $\text{rec}_{\mathbb{N}}$ is that the ``next step'' function of $\text{rec}_{\mathbb{N}}$ takes an input from $\mathbb{N}$. During recursive calls, this input is the predecessor of the current iterative index of $\text{rec}_{\mathbb{N}}$. As $\text{iter}$ does not automatically keep track of this number, one must manually do so to define a $\text{rec}_{\mathbb{N}}$ look-a-like with $\text{iter}$.
+
+This can be achieved using products. Call $\text{iter}$ on $\mathbb{N} \times \cl{C}$ instead of $\cl{C}$, tracking the predecessor on the left and the main calculation on the right. This is analogous to keeping track of the iteration count in ``for-loop''s. More concretely, given a type $\cl{C} : \cl{U}$, an initial element $c_{0} : \cl{C}$, a ``next step'' function $c_{s} : \mathbb{N} \to \cl{C} \to \cl{C}$ and the current iterative index $n : \mathbb{N}$, define
+\begin{align*}
+	c'_{0} &:\equiv (0, c_{0}) : \mathbb{N} \times \cl{C} \\
+	c'_{s} &:\equiv \lambda x.(\text{succ}\,\text{pr}_{1}\,x,c_{s}\,x) : \mathbb{N} \times \cl{C} \to \mathbb{N} \times \cl{C} \\
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n) &:\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) : \cl{C}
+\end{align*}
+Note that for convenience, I write $c_{s}\,x$ instead of $c_{s}(\text{pr}_{1}\,x,\text{pr}_{2}\,x)$. One can verify this definition for a few values:
+\begin{align*}
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 0) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 0) \equiv \text{pr}_{2}\,c'_{0} \equiv \text{pr}_{2}\,(0,c_{0}) \equiv c_{0} \\
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 1) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 1) \equiv \text{pr}_{2}\,c'_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 0) \\
+	&\equiv \text{pr}_{2}\,(\lambda x.(\text{succ}\,\text{pr}_{1}\,x,c_{s}\,x))\,(0,c_{0}) \\
+	&\equiv \text{pr}_{2}\,(1,c_{s}(0,c_{0})) \equiv c_{s}(0,c_{0}) \\
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 2) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 2) \equiv \text{pr}_{2}\,c'_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 1) \\
+	&\equiv \text{pr}_{2}\,(\lambda x.(\text{succ}\,\text{pr}_{1}\,x,c_{s}\,x))\,(1,c_{s}(0,c_{0})) \\
+	&\equiv \text{pr}_{2}\,(2,c_{s}(1,c_{s}(0,c_{0}))) \equiv c_{s}(1,c_{s}(0,c_{0}))
+\end{align*}
+which are indeed the expressions returned by using the usual $\text{rec}_{\mathbb{N}}$ on the corresponding values. However, it is \textit{not} immediately clear that this $\text{rec}'_{\mathbb{N}}$ satisfies the judgmental equalities of $\text{rec}_{\mathbb{N}}$. In particular, while the first equality is satisfied: $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 0) \equiv c_{0}$ as seen above, the second equality is problematic:
+\begin{align*}
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, \text{succ}(n)) \equiv \text{pr}_{2}\,c'_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
+	&\equiv \text{pr}_{2}\,(\text{succ}\,\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n), c_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
+	&\equiv c_{s}(\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n),\text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
+	&\equiv c_{s}(\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n),\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
+\end{align*}
+which is almost the same but nevertheless different from the usual $\text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) \equiv c_{s}(n, \text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. In fact, it is impossible, without further type rules, to \textit{judgmentally} equate $\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)$ to $n$ and, hence, to equate $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n))$ to $c_{s}(n, \text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. However, one can get a weaker \textit{propositional} version of the equality using induction. Before one gets to that though, one needs convenient names to deal with long unwieldy terms:
+\begin{align*}
+	\text{cnt}_{n} &:\equiv \text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
+	\text{calc}(x,n) &:\equiv c_{s}(x,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
+\end{align*}
+
+To construct the required induction, one must first construct its inputs. The first two are easy:
+\begin{align*}
+	\cl{I} &:\equiv \lambda n.\text{cnt}_{n} =_{\mathbb{N}} n : \mathbb{N} \to \cl{U} \\
+	i_{0} &:\equiv \text{refl}_{0} : \cl{I}(0) \equiv \text{cnt}_{0} =_{\mathbb{N}} 0 \equiv 0 =_{\mathbb{N}} 0
+\end{align*}
+
+The ``next-step'' input $i_{s}$ is more involved. Given $n : \mathbb{N}$ and $p_{n} : \text{cnt}_{n} =_{\mathbb{N}} n$, one must show $\text{cnt}_{\text{succ}(n)} =_{\mathbb{N}} \text{succ}(n)$ i.e. $\text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(n)$ (expand out $\text{cnt}_{\text{succ}(n)}$ to see this). For this, one needs to use the indiscernability of identicals $\text{rec}_{=_{\mathbb{N}}}$:
+\begin{align*}
+	\cl{E} &:\equiv \lambda x.\text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(x) : \mathbb{N} \to \cl{U} \\
+	p_{n} &: \text{cnt}_{n} =_{\mathbb{N}} n \quad \textit{(the given $p_{n}$)} \\
+	\text{refl}_{\text{succ}(\text{cnt}_{n})} &: \cl{E}(\text{cnt}_{n}) \equiv \text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(\text{cnt}_{n}) \\
+	\text{rec}_{=_{\mathbb{N}}}(\cl{E}, \text{cnt}_{n}, n, p_{n}, \text{refl}_{\text{succ}(\text{cnt}_{n})}) &: \cl{E}(n) \equiv \text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(n) \quad \textit{(the required inhabitant)}
+\end{align*}
+Thus one can define
+\[
+	i_{s} :\equiv \lambda n. \lambda p_{n}. \text{rec}_{=_{\mathbb{N}}}(\cl{E}, \text{cnt}_{n}, n, p_{n}, \text{refl}_{\text{succ}(\text{cnt}_{n})}) : \prod_{(n : \mathbb{N})} \cl{I}(n) \to \cl{I}(\text{succ}(n))
+\]
+and one gets the sought-for propositional equality
+\[
+	\text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}) : \prod_{(n : \mathbb{N})} \text{cnt}_{n} =_{\mathbb{N}} n \equiv \prod_{(n : \mathbb{N})}\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) =_{\mathbb{N}} n
+\]
+Using this, apply the indiscernability of identicals again to finally prove $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) =_{\mathbb{N}} c_{s}(n,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$ with
+\[
+	\text{rec}_{=_{\mathbb{N}}}(\lambda x. \text{calc}(\text{cnt}_{n},n) =_{\cl{C}} \text{calc}(x,n), \text{cnt}_{n}, n, \text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}, n), \text{refl}_{\text{calc}(\text{cnt}_{n},n)})
+\] \\
+
+
+
+\BF{Exercise 1.11.} Show that for any type $\cl{A}$, we have $\neg\neg\neg \cl{A} \to \neg \cl{A}$. \\
+
+
+\textit{Proof:} In other words, one needs an inhabitant of $(((\cl{A} \to \BF{0}) \to \BF{0}) \to \BF{0}) \to \cl{A} \to \BF{0}$. Well, assume as given an inhabitant $x^{\neg\neg\neg} : ((\cl{A} \to \BF{0}) \to \BF{0}) \to \BF{0}$ and an inhabitant $x : \cl{A}$. One now needs to produce an inhabitant of $\BF{0}$.
+
+Note that $x^{\neg\neg\neg}$ takes an input of $(\cl{A} \to \BF{0}) \to \BF{0}$ to produce an output of $\BF{0}$. So, the idea is to find an input of $(\cl{A} \to \BF{0}) \to \BF{0}$ and apply $x^{\neg\neg\neg}$ to it. But an input of $(\cl{A} \to \BF{0}) \to \BF{0}$ must itself take an input of $\cl{A} \to \BF{0}$ to produce an output of $\BF{0}$. This is easy to construct given an $x : \cl{A}$. For any $x^{\neg} : \cl{A} \to \BF{0}$, simply apply it to $x : \cl{A}$ :- $x^{\neg}(x) : \BF{0}$.
+Given the previous, one can see that $x^{\neg\neg\neg}(\lambda x^{\neg} . x^{\neg}(x)) : \BF{0}$. Thus, the desired inhabitant is:
+\[
+	\lambda x^{\neg\neg\neg} . \lambda x . x^{\neg\neg\neg}(\lambda x^{\neg} . x^{\neg}(x)) : (((\cl{A} \to \BF{0}) \to \BF{0}) \to \BF{0}) \to \cl{A} \to \BF{0}
+\]
+In fact, one can produce an inhabitant of the converse too:
+\[
+	\lambda x^{\neg} . \lambda x^{\neg\neg} . x^{\neg\neg}(x^{\neg}) : (\cl{A} \to \BF{0}) \to ((\cl{A} \to \BF{0}) \to \BF{0}) \to \BF{0}
+\]
+
+\BF{Note:} One \textit{cannot} repeat the above steps to produce an inhabitant of $\neg\neg \cl{A} \to \cl{A}$. It is not clear how one can produce an $x : \cl{A}$ given a function $x^{\neg\neg} : (\cl{A} \to \BF{0}) \to \BF{0}$. For one thing, one does not have anything to apply this function to. For another thing, even if one could apply this function to something, the output of the function will be an inhabitant of $\BF{0}$ and not necessarily an inhabitant of $\cl{A}$. However, one can produce an inhabitant of its converse $\cl{A} \to \neg\neg \cl{A}$ as one did before:
+\[
+	\lambda x . \lambda x^{\neg} . x^{\neg}(x) : \cl{A} \to (\cl{A} \to \BF{0}) \to \BF{0} \equiv \cl{A} \to \neg\neg \cl{A}
+\]
+
+
+
+%\BF{Exercise 1.13.} Using the propositions-as-types, derive the double negation of the principle of excluded middle, i.e. prove \textit{not}(\textit{not}($P$ \textit{or} \textit{not} $P$)). \\
+%
+%
+%\textit{Proof:} In other words, one has to find an inhabitant of $((P + (P \to \BF{0})) \to \BF{0}) \to \BF{0}$.
