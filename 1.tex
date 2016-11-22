@@ -37,7 +37,7 @@ In the case where $x \equiv (a,b)$, one can verify the correctness of this defin
 \begin{align*}
 	\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) &\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,(a,b))_*(g(\text{pr}_1\,(a,b))(\text{pr}_2\,(a,b)))\\
 	&\equiv  (\text{refl}_{(a,b)})_*(g(a)(b)) \equiv  \text{id}_{\cl{C}((a,b))}(g(a)(b)) \equiv  g(a)(b)
-\end{align*}
+\end{align*} \\
 
 
 
@@ -80,34 +80,33 @@ which are indeed the expressions returned by using the usual $\text{rec}_{\mathb
 \end{align*}
 which is almost the same but nevertheless different from the usual $\text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) \equiv c_{s}(n, \text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. In fact, it is impossible, without further type rules, to \textit{judgmentally} equate $\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)$ to $n$ and, hence, to equate $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n))$ to $c_{s}(n, \text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. However, one can get a weaker \textit{propositional} version of the equality using induction. Before one gets to that though, one needs convenient names to deal with long unwieldy terms:
 \begin{align*}
-	\text{cnt}_{n} &:\equiv \text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
-	\text{calc}(x,n) &:\equiv c_{s}(x,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
+	\text{recnum}_{n} &:\equiv \text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
+	\hat{c}_{s}(x,n) &:\equiv c_{s}(x,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
 \end{align*}
 
 To construct the required induction, one must first construct its inputs. The first two are easy:
 \begin{align*}
-	\cl{I} &:\equiv \lambda n.\text{cnt}_{n} =_{\mathbb{N}} n : \mathbb{N} \to \cl{U} \\
-	i_{0} &:\equiv \text{refl}_{0} : \cl{I}(0) \equiv \text{cnt}_{0} =_{\mathbb{N}} 0 \equiv 0 =_{\mathbb{N}} 0
+	\cl{I} &:\equiv \lambda n.\text{recnum}_{n} =_{\mathbb{N}} n : \mathbb{N} \to \cl{U} \\
+	i_{0} &:\equiv \text{refl}_{0} : \cl{I}(0) \equiv \text{recnum}_{0} =_{\mathbb{N}} 0 \equiv 0 =_{\mathbb{N}} 0
 \end{align*}
 
-The ``next-step'' input $i_{s}$ is more involved. Given $n : \mathbb{N}$ and $p_{n} : \text{cnt}_{n} =_{\mathbb{N}} n$, one must show $\text{cnt}_{\text{succ}(n)} =_{\mathbb{N}} \text{succ}(n)$ i.e. $\text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(n)$ (expand out $\text{cnt}_{\text{succ}(n)}$ to see this). For this, one needs to use the indiscernability of identicals $\text{rec}_{=_{\mathbb{N}}}$:
+The ``next-step'' input $i_{s}$ is more involved. Given $n : \mathbb{N}$ and $p_{n} : \text{recnum}_{n} =_{\mathbb{N}} n$, one must show $\text{recnum}_{\text{succ}(n)} =_{\mathbb{N}} \text{succ}(n)$ i.e. $\text{succ}(\text{recnum}_{n}) =_{\mathbb{N}} \text{succ}(n)$ (expand out $\text{recnum}_{\text{succ}(n)}$ to see this). This requires the indiscernability of identicals $\text{rec}_{=_{\mathbb{N}}}$:
 \begin{align*}
-	\cl{E} &:\equiv \lambda x.\text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(x) : \mathbb{N} \to \cl{U} \\
-	p_{n} &: \text{cnt}_{n} =_{\mathbb{N}} n \quad \textit{(the given $p_{n}$)} \\
-	\text{refl}_{\text{succ}(\text{cnt}_{n})} &: \cl{E}(\text{cnt}_{n}) \equiv \text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(\text{cnt}_{n}) \\
-	\text{rec}_{=_{\mathbb{N}}}(\cl{E}, \text{cnt}_{n}, n, p_{n}, \text{refl}_{\text{succ}(\text{cnt}_{n})}) &: \cl{E}(n) \equiv \text{succ}(\text{cnt}_{n}) =_{\mathbb{N}} \text{succ}(n) \quad \textit{(the required inhabitant)}
+	\cl{E} &:\equiv \lambda x.\text{succ}(\text{recnum}_{n}) =_{\mathbb{N}} \text{succ}(x) : \mathbb{N} \to \cl{U} \\
+	\text{refl}_{\text{succ}(\text{recnum}_{n})} &: \cl{E}(\text{recnum}_{n}) \equiv \text{succ}(\text{recnum}_{n}) =_{\mathbb{N}} \text{succ}(\text{recnum}_{n}) \\
+	\text{rec}_{=_{\mathbb{N}}}(\cl{E}, \text{recnum}_{n}, n, p_{n}, \text{refl}_{\text{succ}(\text{recnum}_{n})}) &: \cl{E}(n) \equiv \text{succ}(\text{recnum}_{n}) =_{\mathbb{N}} \text{succ}(n) \quad \textit{(the required inhabitant)}
 \end{align*}
 Thus one can define
 \[
-	i_{s} :\equiv \lambda n. \lambda p_{n}. \text{rec}_{=_{\mathbb{N}}}(\cl{E}, \text{cnt}_{n}, n, p_{n}, \text{refl}_{\text{succ}(\text{cnt}_{n})}) : \prod_{(n : \mathbb{N})} \cl{I}(n) \to \cl{I}(\text{succ}(n))
+	i_{s} :\equiv \lambda n. \lambda p_{n}. \text{rec}_{=_{\mathbb{N}}}(\cl{E}, \text{recnum}_{n}, n, p_{n}, \text{refl}_{\text{succ}(\text{recnum}_{n})}) : \prod_{(n : \mathbb{N})} \cl{I}(n) \to \cl{I}(\text{succ}(n))
 \]
 and one gets the sought-for propositional equality
 \[
-	\text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}) : \prod_{(n : \mathbb{N})} \text{cnt}_{n} =_{\mathbb{N}} n \equiv \prod_{(n : \mathbb{N})}\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) =_{\mathbb{N}} n
+	\text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}) : \prod_{(n : \mathbb{N})} \text{recnum}_{n} =_{\mathbb{N}} n \equiv \prod_{(n : \mathbb{N})}\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) =_{\mathbb{N}} n
 \]
 Using this, apply the indiscernability of identicals again to finally prove $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) =_{\mathbb{N}} c_{s}(n,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$ with
 \[
-	\text{rec}_{=_{\mathbb{N}}}(\lambda x. \text{calc}(\text{cnt}_{n},n) =_{\cl{C}} \text{calc}(x,n), \text{cnt}_{n}, n, \text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}, n), \text{refl}_{\text{calc}(\text{cnt}_{n},n)})
+	\text{rec}_{=_{\mathbb{N}}}(\lambda x. \hat{c}_{s}(\text{recnum}_{n},n) =_{\cl{C}} \hat{c}_{s}(x,n), \text{recnum}_{n}, n, \text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}, n), \text{refl}_{\hat{c}_{s}(\text{recnum}_{n},n)})
 \] \\
 
 
@@ -130,11 +129,26 @@ In fact, one can produce an inhabitant of the converse too:
 \BF{Note:} One \textit{cannot} repeat the above steps to produce an inhabitant of $\neg\neg \cl{A} \to \cl{A}$. It is not clear how one can produce an $x : \cl{A}$ given a function $x^{\neg\neg} : (\cl{A} \to \BF{0}) \to \BF{0}$. For one thing, one does not have anything to apply this function to. For another thing, even if one could apply this function to something, the output of the function will be an inhabitant of $\BF{0}$ and not necessarily an inhabitant of $\cl{A}$. However, one can produce an inhabitant of its converse $\cl{A} \to \neg\neg \cl{A}$ as one did before:
 \[
 	\lambda x . \lambda x^{\neg} . x^{\neg}(x) : \cl{A} \to (\cl{A} \to \BF{0}) \to \BF{0} \equiv \cl{A} \to \neg\neg \cl{A}
-\]
+\] \\
 
 
 
-%\BF{Exercise 1.13.} Using the propositions-as-types, derive the double negation of the principle of excluded middle, i.e. prove \textit{not}(\textit{not}($P$ \textit{or} \textit{not} $P$)). \\
-%
-%
-%\textit{Proof:} In other words, one has to find an inhabitant of $((P + (P \to \BF{0})) \to \BF{0}) \to \BF{0}$.
+\BF{Exercise 1.13.} Using the propositions-as-types, derive the double negation of the principle of excluded middle, i.e. prove \textit{not}(\textit{not}($\cl{P}$ \textit{or} \textit{not} $\cl{P}$)). \\
+
+
+\textit{Proof:} In other words, one has to find an inhabitant of $((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}$. However, it is easier to prove $((\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})) \to \BF{0}$ first.
+
+To do so, given an inhabitant $\text{contra} : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$, one must find an inhabitant of $\BF{0}$. Note that the type on the product's left side, $\cl{P} \to \BF{0}$, is the same as the input of the type on the product's right side, $(\cl{P} \to \BF{0}) \to \BF{0}$. Thus, one can decompose $\text{contra}$ to its components and apply the right component to the left one: $(\text{pr}_{2}\,\text{contra})\,\text{pr}_{1}\,\text{contra} : \BF{0}$.
+
+Now, to complete the overall proof one needs to go from an inhabitant $\text{xmid}^{\neg} : (\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}$ to some inhabitant $(?,?) : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$.
+\begin{itemize}
+\item To fill in the ``left question mark'', one needs some function $? : \cl{P} \to \BF{0}$ i.e. one needs to get some $? : \BF{0}$ given a $p : \cl{P}$. But if one has a $p : \cl{P}$, one also has $\text{inl}\,p : \cl{P} + (\cl{P} \to \BF{0})$; so $\text{xmid}^{\neg}(\text{inl}\,p) : \BF{0}$. Thus, $\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p) : \cl{P} \to \BF{0}$.
+\item Similarly, to fill in the right question mark one has $\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg}) : (\cl{P} \to \BF{0}) \to \BF{0}$.
+\end{itemize}
+
+Combining all these together, one has the following proof of the original proposition:
+\begin{align*}
+	&\lambda \,\text{xmid}^{\neg}. (\text{pr}_{2}\,(\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p),\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg})))\,\text{pr}_{1}\,(\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p),\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg})) \\
+	\equiv \, &\lambda \,\text{xmid}^{\neg}. (\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg}))\,\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p) \\
+	\equiv \, &\lambda \,\text{xmid}^{\neg}. \,\text{xmid}^{\neg}(\text{inr}\,\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p)) : ((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}
+\end{align*}
