@@ -8,7 +8,7 @@
 \BF{Exercise 1.2.} Derive the recursion principle for products $\text{rec}_{(\cl{A} \times \cl{B})}$ using only the projections, and verify that the definitional equalities are valid. Do the same for $\Sigma$-types. \\
 
 
-\textit{Proof:} It suffices to show this for $\Sigma$-types as they generalize product types: define $\text{rec}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,p) :\equiv g(\text{pr}_1\,p)(\text{pr}_2\,p)$ where $\cl{C} : \cl{U}$, $g : \Pi_{(x : \cl{A})}\cl{B}(x) \to \cl{C}$ and $p : \Sigma_{(x : \cl{A})}\cl{B}(x)$. Then, $\text{rec}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) :\equiv g(\text{pr}_1\,(a,b))(\text{pr}_2\,(a,b)) \equiv g(a)(b)$. \\
+\textit{Proof:} It suffices to show this for $\Sigma$-types as they generalize product types: define $\text{rec}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,p) :\equiv g(\text{pr}_1\;p)(\text{pr}_2\;p)$ where $\cl{C} : \cl{U}$, $g : \Pi_{(x : \cl{A})}\cl{B}(x) \to \cl{C}$ and $p : \Sigma_{(x : \cl{A})}\cl{B}(x)$. Then, $\text{rec}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) :\equiv g(\text{pr}_1\;(a,b))(\text{pr}_2\;(a,b)) \equiv g(a)(b)$. \\
 
 
     
@@ -21,21 +21,21 @@ To reiterate, one needs to derive
 \[
 	\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)} : \prod_{\cl{C} : (\Sigma_{(x : \cl{A})}\cl{B}(x)) \to \cl{U}}(\prod_{a : \cl{A}}\prod_{b : \cl{B}(a)}\cl{C}((a,b))) \to \prod_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\cl{C}(x)
 \]
-This is \textit{not} as simple as defining $\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,x) :\equiv g(\text{pr}_1\,x)(\text{pr}_2\,x)$. The problem is this: for arbitrary $x : \Sigma_{(x : \cl{A})}\cl{B}(x)$, one does not immediately know whether $g(\text{pr}_1\,x)(\text{pr}_2\,x) : \cl{C}(x)$. The only guarantee one has is that $g(\text{pr}_1\,x)(\text{pr}_2\,x) : \cl{C}((\text{pr}_1\,x,\text{pr}_2\,x))$. Now, by the uniqueness principle of product types, one has
+This is \textit{not} as simple as defining $\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,x) :\equiv g(\text{pr}_1\;x)(\text{pr}_2\;x)$. The problem is this: for arbitrary $x : \Sigma_{(x : \cl{A})}\cl{B}(x)$, one does not immediately know whether $g(\text{pr}_1\;x)(\text{pr}_2\;x) : \cl{C}(x)$. The only guarantee one has is that $g(\text{pr}_1\;x)(\text{pr}_2\;x) : \cl{C}((\text{pr}_1\;x,\text{pr}_2\;x))$. Now, by the uniqueness principle of product types, one has
 \[
-	\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x : (\text{pr}_1\,x,\text{pr}_2\,x) =_{\Sigma_{(x : \cl{A})}\cl{B}(x)} x
+	\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\;x : (\text{pr}_1\;x,\text{pr}_2\;x) =_{\Sigma_{(x : \cl{A})}\cl{B}(x)} x
 \]
-where $\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,(a,b) :\equiv \text{refl}_{(a,b)}$. Also, by the recursion principle of identity types (i.e. the indiscernability of identicals),
+where $\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\;(a,b) :\equiv \text{refl}_{(a,b)}$. Also, by the recursion principle of identity types (i.e. the indiscernability of identicals),
 \[
-	\text{rec}_{=_{\Sigma_{(x : \cl{A})}\cl{B}(x)}}(\cl{C}, (\text{pr}_1\,x,\text{pr}_2\,x), x, \text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x) : \cl{C}((\text{pr}_1\,x,\text{pr}_2\,x)) \to \cl{C}(x)
+	\text{rec}_{=_{\Sigma_{(x : \cl{A})}\cl{B}(x)}}(\cl{C}, (\text{pr}_1\;x,\text{pr}_2\;x), x, \text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\;x) : \cl{C}((\text{pr}_1\;x,\text{pr}_2\;x)) \to \cl{C}(x)
 \]
-where $\text{rec}_{=_{\Sigma_{(x : \cl{A})}\cl{B}(x)}}(\cl{C},x,x,\text{refl}_x) :\equiv \text{id}_{\cl{C}(x)}$. Only now can one finally use this to get $\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}$; for convenience, denote the previous function as $(\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x)_*$:
+where $\text{rec}_{=_{\Sigma_{(x : \cl{A})}\cl{B}(x)}}(\cl{C},x,x,\text{refl}_x) :\equiv \text{id}_{\cl{C}(x)}$. Only now can one finally use this to get $\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}$; for convenience, denote the previous function as $(\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\;x)_*$:
 \[
-\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,x) :\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,x)_*(g(\text{pr}_1\,x)(\text{pr}_2\,x))) : \cl{C}(x)
+\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,x) :\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\;x)_*(g(\text{pr}_1\;x)(\text{pr}_2\;x))) : \cl{C}(x)
 \]
 In the case where $x \equiv (a,b)$, one can verify the correctness of this definition:
 \begin{align*}
-	\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) &\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\,(a,b))_*(g(\text{pr}_1\,(a,b))(\text{pr}_2\,(a,b)))\\
+	\text{ind}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}(\cl{C},g,(a,b)) &\equiv (\text{uniq}_{\Sigma_{(x : \cl{A})}\cl{B}(x)}\;(a,b))_*(g(\text{pr}_1\;(a,b))(\text{pr}_2\;(a,b)))\\
 	&\equiv  (\text{refl}_{(a,b)})_*(g(a)(b)) \equiv  \text{id}_{\cl{C}((a,b))}(g(a)(b)) \equiv  g(a)(b)
 \end{align*} \\
 
@@ -58,29 +58,29 @@ derive a function having the type of the recursor $\text{rec}_{\mathbb{N}}$. Sho
 This can be achieved using products. Call $\text{iter}$ on $\mathbb{N} \times \cl{C}$ instead of $\cl{C}$, tracking the predecessor on the left and the main calculation on the right. This is analogous to keeping track of the iteration count in ``for-loop''s. More concretely, given a type $\cl{C} : \cl{U}$, an initial element $c_{0} : \cl{C}$, a ``next step'' function $c_{s} : \mathbb{N} \to \cl{C} \to \cl{C}$ and the current iterative index $n : \mathbb{N}$, define
 \begin{align*}
 	c'_{0} &:\equiv (0, c_{0}) : \mathbb{N} \times \cl{C} \\
-	c'_{s} &:\equiv \lambda x.(\text{succ}\,\text{pr}_{1}\,x,c_{s}\,x) : \mathbb{N} \times \cl{C} \to \mathbb{N} \times \cl{C} \\
-	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n) &:\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) : \cl{C}
+	c'_{s} &:\equiv \lambda x.(\text{succ}(\text{pr}_{1}\;x),c_{s}\;x) : \mathbb{N} \times \cl{C} \to \mathbb{N} \times \cl{C} \\
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n) &:\equiv \text{pr}_{2}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) : \cl{C}
 \end{align*}
-Note that for convenience, I write $c_{s}\,x$ instead of $c_{s}(\text{pr}_{1}\,x,\text{pr}_{2}\,x)$. One can verify this definition for a few values:
+Note that for convenience, I write $c_{s}\;x$ instead of $c_{s}(\text{pr}_{1}\;x,\text{pr}_{2}\;x)$. One can verify this definition for a few values:
 \begin{align*}
-	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 0) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 0) \equiv \text{pr}_{2}\,c'_{0} \equiv \text{pr}_{2}\,(0,c_{0}) \equiv c_{0} \\
-	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 1) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 1) \equiv \text{pr}_{2}\,c'_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 0) \\
-	&\equiv \text{pr}_{2}\,(\lambda x.(\text{succ}\,\text{pr}_{1}\,x,c_{s}\,x))\,(0,c_{0}) \\
-	&\equiv \text{pr}_{2}\,(1,c_{s}(0,c_{0})) \equiv c_{s}(0,c_{0}) \\
-	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 2) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 2) \equiv \text{pr}_{2}\,c'_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 1) \\
-	&\equiv \text{pr}_{2}\,(\lambda x.(\text{succ}\,\text{pr}_{1}\,x,c_{s}\,x))\,(1,c_{s}(0,c_{0})) \\
-	&\equiv \text{pr}_{2}\,(2,c_{s}(1,c_{s}(0,c_{0}))) \equiv c_{s}(1,c_{s}(0,c_{0}))
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 0) &\equiv \text{pr}_{2}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 0) \equiv \text{pr}_{2}\;c'_{0} \equiv \text{pr}_{2}\;(0,c_{0}) \equiv c_{0} \\
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 1) &\equiv \text{pr}_{2}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 1) \equiv \text{pr}_{2}(c'_{s}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 0)) \\
+	&\equiv \text{pr}_{2}((\lambda x.(\text{succ}(\text{pr}_{1}\;x),c_{s}\;x))\;(0,c_{0})) \\
+	&\equiv \text{pr}_{2}\;(1,c_{s}(0,c_{0})) \equiv c_{s}(0,c_{0}) \\
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 2) &\equiv \text{pr}_{2}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 2) \equiv \text{pr}_{2}(c'_{s}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, 1)) \\
+	&\equiv \text{pr}_{2}((\lambda x.(\text{succ}(\text{pr}_{1}\;x),c_{s}\;x))\;(1,c_{s}(0,c_{0}))) \\
+	&\equiv \text{pr}_{2}\;(2,c_{s}(1,c_{s}(0,c_{0}))) \equiv c_{s}(1,c_{s}(0,c_{0}))
 \end{align*}
 which are indeed the expressions returned by using the usual $\text{rec}_{\mathbb{N}}$ on the corresponding values. However, it is \textit{not} immediately clear that this $\text{rec}'_{\mathbb{N}}$ satisfies the judgmental equalities of $\text{rec}_{\mathbb{N}}$. In particular, while the first equality is satisfied: $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, 0) \equiv c_{0}$ as seen above, the second equality is problematic:
 \begin{align*}
-	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) &\equiv \text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, \text{succ}(n)) \equiv \text{pr}_{2}\,c'_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
-	&\equiv \text{pr}_{2}\,(\text{succ}\,\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n), c_{s}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
-	&\equiv c_{s}(\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n),\text{pr}_{2}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
-	&\equiv c_{s}(\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n),\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
+	\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) &\equiv \text{pr}_{2}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, \text{succ}(n)) \equiv \text{pr}_{2}(c'_{s}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
+	&\equiv \text{pr}_{2}\;(\text{succ}(\text{pr}_{1}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)), c_{s}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
+	&\equiv c_{s}(\text{pr}_{1}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n),\text{pr}_{2}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) \\
+	&\equiv c_{s}(\text{pr}_{1}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n),\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
 \end{align*}
-which is almost the same but nevertheless different from the usual $\text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) \equiv c_{s}(n, \text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. In fact, it is impossible, without further type rules, to \textit{judgmentally} equate $\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)$ to $n$ and, hence, to equate $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n))$ to $c_{s}(n, \text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. However, one can get a weaker \textit{propositional} version of the equality using induction. Before one gets to that though, one needs convenient names to deal with long unwieldy terms:
+which is almost the same but nevertheless different from the usual $\text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) \equiv c_{s}(n, \text{rec}_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. In fact, it is impossible, without further type rules, to \textit{judgmentally} equate $\text{pr}_{1}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)$ to $n$ and, hence, to equate $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n))$ to $c_{s}(n, \text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$. However, one can get a weaker \textit{propositional} version of the equality using induction. Before one gets to that though, one needs convenient names to deal with long unwieldy terms:
 \begin{align*}
-	\text{recnum}_{n} &:\equiv \text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
+	\text{recnum}_{n} &:\equiv \text{pr}_{1}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) \\
 	\hat{c}_{s}(x,n) &:\equiv c_{s}(x,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))
 \end{align*}
 
@@ -102,7 +102,7 @@ Thus one can define
 \]
 and one gets the sought-for propositional equality
 \[
-	\text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}) : \prod_{(n : \mathbb{N})} \text{recnum}_{n} =_{\mathbb{N}} n \equiv \prod_{(n : \mathbb{N})}\text{pr}_{1}\,\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n) =_{\mathbb{N}} n
+	\text{ind}_{\mathbb{N}}(\cl{I}, i_{0}, i_{s}) : \prod_{(n : \mathbb{N})} \text{recnum}_{n} =_{\mathbb{N}} n \equiv \prod_{(n : \mathbb{N})}(\text{pr}_{1}\;\text{iter}(\mathbb{N} \times \cl{C}, c'_{0}, c'_{s}, n)) =_{\mathbb{N}} n
 \]
 Using this, apply the indiscernability of identicals again to finally prove $\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, \text{succ}(n)) =_{\mathbb{N}} c_{s}(n,\text{rec}'_{\mathbb{N}}(\cl{C}, c_{0}, c_{s}, n))$ with
 \[
@@ -138,17 +138,17 @@ In fact, one can produce an inhabitant of the converse too:
 
 \textit{Proof:} In other words, one has to find an inhabitant of $((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}$. However, it is easier to prove $((\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})) \to \BF{0}$ first.
 
-To do so, given an inhabitant $\text{contra} : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$, one must find an inhabitant of $\BF{0}$. Note that the type on the product's left side, $\cl{P} \to \BF{0}$, is the same as the input of the type on the product's right side, $(\cl{P} \to \BF{0}) \to \BF{0}$. Thus, one can decompose $\text{contra}$ to its components and apply the right component to the left one: $(\text{pr}_{2}\,\text{contra})\,\text{pr}_{1}\,\text{contra} : \BF{0}$.
+To do so, given an inhabitant $\text{contra} : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$, one must find an inhabitant of $\BF{0}$. Note that the type on the product's left side, $\cl{P} \to \BF{0}$, is the same as the input of the type on the product's right side, $(\cl{P} \to \BF{0}) \to \BF{0}$. Thus, one can decompose $\text{contra}$ to its components and apply the right component to the left one: $(\text{pr}_{2}\;\text{contra})\;\text{pr}_{1}\;\text{contra} : \BF{0}$.
 
 Now, to complete the overall proof one needs to go from an inhabitant $\text{xmid}^{\neg} : (\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}$ to some inhabitant $(?,?) : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$.
 \begin{itemize}
-\item To fill in the ``left question mark'', one needs some function $? : \cl{P} \to \BF{0}$ i.e. one needs to get some $? : \BF{0}$ given a $p : \cl{P}$. But if one has a $p : \cl{P}$, one also has $\text{inl}\,p : \cl{P} + (\cl{P} \to \BF{0})$; so $\text{xmid}^{\neg}(\text{inl}\,p) : \BF{0}$. Thus, $\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p) : \cl{P} \to \BF{0}$.
-\item Similarly, to fill in the right question mark one has $\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg}) : (\cl{P} \to \BF{0}) \to \BF{0}$.
+\item To fill in the ``left question mark'', one needs some function $? : \cl{P} \to \BF{0}$ i.e. one needs to get some $? : \BF{0}$ given a $p : \cl{P}$. But if one has a $p : \cl{P}$, one also has $\text{inl}\;p : \cl{P} + (\cl{P} \to \BF{0})$; so $\text{xmid}^{\neg}(\text{inl}\;p) : \BF{0}$. Thus, $\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p) : \cl{P} \to \BF{0}$.
+\item Similarly, to fill in the right question mark one has $\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg}) : (\cl{P} \to \BF{0}) \to \BF{0}$.
 \end{itemize}
 
 Combining all these together, one has the following proof of the original proposition:
 \begin{align*}
-	&\lambda \,\text{xmid}^{\neg}. (\text{pr}_{2}\,(\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p),\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg})))\,\text{pr}_{1}\,(\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p),\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg})) \\
-	\equiv \, &\lambda \,\text{xmid}^{\neg}. (\lambda p^{\neg}.\,\text{xmid}^{\neg}(\text{inr}\,p^{\neg}))\,\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p) \\
-	\equiv \, &\lambda \,\text{xmid}^{\neg}. \,\text{xmid}^{\neg}(\text{inr}\,\lambda p.\,\text{xmid}^{\neg}(\text{inl}\,p)) : ((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}
+	&\lambda \;\text{xmid}^{\neg}. (\text{pr}_{2}\;(\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p),\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg})))(\text{pr}_{1}\;(\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p),\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg}))) \\
+	\equiv \; &\lambda \;\text{xmid}^{\neg}. (\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg}))(\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p)) \\
+	\equiv \; &\lambda \;\text{xmid}^{\neg}. \;\text{xmid}^{\neg}(\text{inr}\;\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p)) : ((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}
 \end{align*}
