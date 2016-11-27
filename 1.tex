@@ -111,6 +111,19 @@ Using this, apply the indiscernability of identicals again to finally prove $\te
 
 
 
+\BF{Exercise 1.9.} Define the type family $\text{Fin} : \mathbb{N} \to \cl{U}$ mentioned at the end of \S$1.3$, and the dependent function $\text{fmax} : \prod_{(n:N)}\text{Fin}(n + 1)$ mentioned in \S$1.4$. \\
+
+
+\text{Proof:} With higher-order functions, this is easy. Assuming that the base universe is $\cl{U}_{i}$ and that there is a natural number recursor $\text{rec}_{\mathbb{N}, \cl{U}_{i+1}}$ in $\cl{U}_{i+1}$, define $\text{Fin} :\equiv \text{rec}_{\mathbb{N}, \cl{U}_{i+1}}(\cl{U}_{i}, \BF{0}, \lambda n. \lambda\text{Fin}_{n}. \text{Fin}_{n} + \BF{1})$.
+
+If the assumptions in the definition above are too much, one can define $\text{Fin} : \mathbb{N} \to \cl{U}$ axiomatically in the same universe: assume, outright, a family $\text{Fin} : \mathbb{N} \to \cl{U}$. To use this family, assume also $\text{finzero} : \prod_{(n:\mathbb{N})}\text{Fin}(\text{succ}(n))$ and $\text{finsucc} : \prod_{(n:\mathbb{N})}\text{Fin}(n)\to\text{Fin}(\text{succ}(n))$. These are the constructors of $\text{Fin}$: they help one construct inhabitants of each $\text{Fin}(n)$.
+
+As an example of how $\text{Fin}$ and its constructors are used, consider how one might construct inhabitants of $\text{Fin}(0)$. Well, there is no way to do so with the given constructors. None of them help one find such an element. When $\text{finzero}$ is evaluated at the lowest possible natural number $0$, it merely produces an inhabitant $\text{finzero}(0)$ in $\text{Fin}(\text{succ}(0)) \equiv \text{Fin}(1)$. A similar story transpires with the other constructor $\text{finsucc}$. This situation corresponds with the idea that $\text{Fin}(0)$ should be empty.
+
+Now consider how one can find elements in $\text{Fin}(1)$. As one saw before, $\text{finzero}(0) : \text{Fin}(1)$. And that is, in fact, it. If one tries to get another element through $\text{finsucc}$, note that $\text{finsucc}(0) : \text{Fin}(0)\to\text{Fin}(1)$. If only one could get an element of $\text{Fin}(0)$, one could use this function to get another inhabitant of $\text{Fin}(1)$. But, as one saw above, there is no such way \textit{using the constructors alone}. And hence, one can construct only one inhabitant of $\text{Fin}(1)$. This corresponds with the idea that $\text{Fin}(1)$ should have only one element $0_{1}$. \\
+
+
+
 \BF{Exercise 1.11.} Show that for any type $\cl{A}$, we have $\neg\neg\neg \cl{A} \to \neg \cl{A}$. \\
 
 
@@ -138,17 +151,17 @@ In fact, one can produce an inhabitant of the converse too:
 
 \textit{Proof:} In other words, one has to find an inhabitant of $((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}$. However, it is easier to prove $((\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})) \to \BF{0}$ first.
 
-To do so, given an inhabitant $\text{contra} : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$, one must find an inhabitant of $\BF{0}$. Note that the type on the product's left side, $\cl{P} \to \BF{0}$, is the same as the input of the type on the product's right side, $(\cl{P} \to \BF{0}) \to \BF{0}$. Thus, one can decompose $\text{contra}$ to its components and apply the right component to the left one: $(\text{pr}_{2}\;\text{contra})\;\text{pr}_{1}\;\text{contra} : \BF{0}$.
+To do so, given an inhabitant $contra : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$, one must find an inhabitant of $\BF{0}$. Note that the type on the product's left side, $\cl{P} \to \BF{0}$, is the same as the input of the type on the product's right side, $(\cl{P} \to \BF{0}) \to \BF{0}$. Thus, one can decompose $contra$ to its components and apply the right component to the left one: $(\text{pr}_{2}\;contra)\;\text{pr}_{1}\;contra : \BF{0}$.
 
-Now, to complete the overall proof one needs to go from an inhabitant $\text{xmid}^{\neg} : (\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}$ to some inhabitant $(?,?) : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$.
+Now, to complete the overall proof one needs to go from an inhabitant $xmid^{\neg} : (\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}$ to some inhabitant $(?,?) : (\cl{P} \to \BF{0}) \times ((\cl{P} \to \BF{0}) \to \BF{0})$.
 \begin{itemize}
-\item To fill in the ``left question mark'', one needs some function $? : \cl{P} \to \BF{0}$ i.e. one needs to get some $? : \BF{0}$ given a $p : \cl{P}$. But if one has a $p : \cl{P}$, one also has $\text{inl}\;p : \cl{P} + (\cl{P} \to \BF{0})$; so $\text{xmid}^{\neg}(\text{inl}\;p) : \BF{0}$. Thus, $\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p) : \cl{P} \to \BF{0}$.
-\item Similarly, to fill in the right question mark one has $\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg}) : (\cl{P} \to \BF{0}) \to \BF{0}$.
+\item To fill in the ``left question mark'', one needs some function $? : \cl{P} \to \BF{0}$ i.e. one needs to get some $? : \BF{0}$ given a $p : \cl{P}$. But if one has a $p : \cl{P}$, one also has $\text{inl}\;p : \cl{P} + (\cl{P} \to \BF{0})$; so $xmid^{\neg}(\text{inl}\;p) : \BF{0}$. Thus, $\lambda p.\;xmid^{\neg}(\text{inl}\;p) : \cl{P} \to \BF{0}$.
+\item Similarly, to fill in the right question mark one has $\lambda p^{\neg}.\;xmid^{\neg}(\text{inr}\;p^{\neg}) : (\cl{P} \to \BF{0}) \to \BF{0}$.
 \end{itemize}
 
 Combining all these together, one has the following proof of the original proposition:
 \begin{align*}
-	&\lambda \;\text{xmid}^{\neg}. (\text{pr}_{2}\;(\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p),\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg})))(\text{pr}_{1}\;(\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p),\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg}))) \\
-	\equiv \; &\lambda \;\text{xmid}^{\neg}. (\lambda p^{\neg}.\;\text{xmid}^{\neg}(\text{inr}\;p^{\neg}))(\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p)) \\
-	\equiv \; &\lambda \;\text{xmid}^{\neg}. \;\text{xmid}^{\neg}(\text{inr}\;\lambda p.\;\text{xmid}^{\neg}(\text{inl}\;p)) : ((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}
+	&\lambda \;xmid^{\neg}. (\text{pr}_{2}\;(\lambda p.\;xmid^{\neg}(\text{inl}\;p),\lambda p^{\neg}.\;xmid^{\neg}(\text{inr}\;p^{\neg})))(\text{pr}_{1}\;(\lambda p.\;xmid^{\neg}(\text{inl}\;p),\lambda p^{\neg}.\;xmid^{\neg}(\text{inr}\;p^{\neg}))) \\
+	\equiv \; &\lambda \;xmid^{\neg}. (\lambda p^{\neg}.\;xmid^{\neg}(\text{inr}\;p^{\neg}))(\lambda p.\;xmid^{\neg}(\text{inl}\;p)) \\
+	\equiv \; &\lambda \;xmid^{\neg}. \;xmid^{\neg}(\text{inr}\;\lambda p.\;xmid^{\neg}(\text{inl}\;p)) : ((\cl{P} + (\cl{P} \to \BF{0})) \to \BF{0}) \to \BF{0}
 \end{align*}
